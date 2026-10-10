@@ -110,6 +110,11 @@ public final class MainActivity extends Activity {
         root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setBackgroundColor(Color.WHITE);
+        root.setOnApplyWindowInsetsListener((view, insets) -> {
+            view.setPadding(0, insets.getSystemWindowInsetTop(),
+                    0, insets.getSystemWindowInsetBottom());
+            return insets;
+        });
 
         LinearLayout header = new LinearLayout(this);
         header.setOrientation(LinearLayout.VERTICAL);
@@ -195,6 +200,10 @@ public final class MainActivity extends Activity {
         settings.setUseWideViewPort(true);
         settings.setLoadWithOverviewMode(false);
         settings.setSupportMultipleWindows(true);
+        String userAgent = settings.getUserAgentString();
+        settings.setUserAgentString(userAgent
+                .replace("; wv", "")
+                .replace("Version/4.0 ", ""));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
             CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
@@ -317,10 +326,17 @@ public final class MainActivity extends Activity {
 
     private void openSite(Site site) {
         selectedSite = site;
-        lastOriginalUrl = site.url;
+        String url = androidUrl(site);
+        lastOriginalUrl = url;
         vipButton.setEnabled(site.canVip);
         titleView.setText(site.name);
-        webView.loadUrl(site.url);
+        webView.loadUrl(url);
+    }
+
+    private String androidUrl(Site site) {
+        if ("爱奇艺".equals(site.name)) return "https://m.iqiyi.com/";
+        if ("腾讯视频".equals(site.name)) return "https://m.v.qq.com/";
+        return site.url;
     }
 
     private void showSiteDialog() {
