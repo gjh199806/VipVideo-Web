@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Some entries in the existing shared list still use HTTP. -->
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

@@ -61,3 +61,10 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
+
+# Android / Gradle
+.gradle/
+local.properties
+**/build/
+*.apk
+*.aab

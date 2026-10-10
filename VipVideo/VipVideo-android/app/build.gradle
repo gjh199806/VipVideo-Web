@@ -1,0 +1,41 @@
+plugins {
+    id "com.android.application"
+}
+
+android {
+    namespace "com.lhl.vipvideo"
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "com.lhl.vipvideo"
+        minSdk 23
+        targetSdk 35
+        versionCode 117
+        versionName "1.1.7"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    sourceSets {
+        main.assets.srcDir(layout.buildDirectory.dir("generated/assets/main"))
+    }
+}
+
+def generateAppAssets = tasks.register("generateAppAssets", Copy) {
+    from("../../VipVideo-electron/vlist.json")
+    into(layout.buildDirectory.dir("generated/assets/main"))
+}
+
+tasks.named("preBuild").configure {
+    dependsOn(generateAppAssets)
+}
